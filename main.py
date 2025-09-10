@@ -4,22 +4,14 @@ import sys
 import math
 import numpy as np
 from pathlib import Path
-
-# 3rd party
 from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import joblib
-
-# Optional, only used if you call --plot
 import matplotlib.pyplot as plt
-
-try:
-    from PIL import Image, ImageOps
-except Exception as e:
-    Image = None  # We'll error nicely if user asks for predict-image
+from PIL import Image, ImageOps
 
 BUNDLE_PATH = Path("digits_mlp.joblib")
 
@@ -139,8 +131,6 @@ def preprocess_image(path, invert_if_needed=True):
         img = img.crop((left, top, left + side, top + side))
     img = img.resize((8, 8), Image.BILINEAR)
 
-    # Many user-written digits are black on white or vice-versa.
-    # Heuristic: if background seems dark, invert to make background dark and digit bright.
     if invert_if_needed:
         np_img = np.array(img, dtype=np.float32)
         if np.mean(np_img) < 127:
@@ -158,7 +148,6 @@ def predict_image(args):
     print(pred)
 
     if args.show:
-        # Visualize what the model saw
         plt.figure()
         plt.imshow(feats.reshape(8,8), interpolation="nearest")
         plt.title(f"Predicted: {pred}")
