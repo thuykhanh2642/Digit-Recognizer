@@ -25,7 +25,6 @@ def load_data(test_size=0.2, seed=42):
     return (X_train, y_train), (X_test, y_test), digits.target_names
 
 def build_model():
-    # Small, fast MLP
     return MLPClassifier(
         hidden_layer_sizes=(128,),
         activation="relu",
@@ -111,7 +110,7 @@ def to_digits_space(img_8x8_gray):
     The sklearn digits dataset uses small 8x8 images with pixel intensities in [0,16].
     This function returns a float32 vector of length 64 in that range.
     """
-    arr = np.asarray(img_8x8_gray, dtype=np.float32)  # 8x8, 0..255
+    arr = np.asarray(img_8x8_gray, dtype=np.float32) 
     # Normalize to 0..16
     arr = (arr / 255.0) * 16.0
     return arr.flatten().astype(np.float32)
@@ -122,7 +121,6 @@ def preprocess_image(path, invert_if_needed=True):
         sys.exit(3)
 
     img = Image.open(path).convert("L")  # grayscale
-    # Center-crop to square, then resize to 8x8
     w, h = img.size
     if w != h:
         side = min(w, h)
